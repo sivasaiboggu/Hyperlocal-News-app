@@ -1,0 +1,39 @@
+{
+  "name": "hyperlocal-news-app",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
+    "test": "jest",
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+  },
+  "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.23.1",
+    "@react-navigation/native": "^6.1.17",
+    "@react-navigation/stack": "^6.3.29",
+    "@reduxjs/toolkit": "^2.2.3",
+    "@shopify/flash-list": "^1.6.4",
+    "axios": "^1.6.8",
+    "react": "18.2.0",
+    "react-native": "0.73.6",
+    "react-native-fast-image": "^8.6.3",
+    "react-native-gesture-handler": "^2.15.0",
+    "react-native-reanimated": "^3.8.1",
+    "react-native-safe-area-context": "^4.9.0",
+    "react-native-screens": "^3.29.0",
+    "redux-persist": "^6.0.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.20.0",
+    "@babel/preset-env": "^7.20.0",
+    "@babel/runtime": "^7.20.0",
+    "@tsconfig/react-native": "^3.0.2",
+    "@types/jest": "^29.5.12",
+    "@types/react": "^18.2.6",
+    "@types/react-test-renderer": "^18.0.7",
+    "jest": "^29.7.0",
+    "typescript": "5.0.4"
+  }
+}
