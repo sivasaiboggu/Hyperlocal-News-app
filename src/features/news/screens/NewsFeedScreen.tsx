@@ -1,6 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, Pressable, ActivityIndicator, SafeAreaView } from 'react-native';
-import { FlashList } from '@shopify/shopify-flash-list';
+import { FlashList } from '@shopify/flash-list';
 import { useNavigation } from '@react-navigation/native';
 import { NewsFeedScreenNavigationProp } from '../../../core/navigation/types';
 import { useAppTheme } from '../../../core/theme';
