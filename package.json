@@ -2,14 +2,16 @@
   "name": "hyperlocal-news-app",
   "version": "1.0.0",
   "private": true,
+  "main": "node_modules/expo/AppEntry.js",
   "scripts": {
-    "android": "react-native run-android",
-    "ios": "react-native run-ios",
-    "start": "react-native start",
+    "start": "expo start",
+    "android": "expo start --android",
+    "ios": "expo start --ios",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
+    "expo": "~50.0.14",
     "@react-native-async-storage/async-storage": "^1.23.1",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/stack": "^6.3.29",
