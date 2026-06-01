@@ -1,6 +1,5 @@
 import React from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
-import FastImage from 'react-native-fast-image';
+import { Image, Pressable, StyleSheet, Text, View } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -17,9 +16,83 @@ interface NewsCardProps {
   onPress: (articleId: string) => void;
 }
 
+const FALLBACK_IMAGES: Record<string, string[]> = {
+  Local: [
+    'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1449034446853-66c86144b0ad?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=600&auto=format&fit=crop',
+  ],
+  Sports: [
+    'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=600&auto=format&fit=crop',
+  ],
+  Politics: [
+    'https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=600&auto=format&fit=crop',
+  ],
+  Entertainment: [
+    'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?q=80&w=600&auto=format&fit=crop',
+  ],
+  Business: [
+    'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=600&auto=format&fit=crop',
+  ],
+  Technology: [
+    'https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=600&auto=format&fit=crop',
+  ],
+  Health: [
+    'https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=600&auto=format&fit=crop',
+  ],
+  International: [
+    'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1521295121783-8a321d551ad2?q=80&w=600&auto=format&fit=crop',
+  ],
+};
+
+const getFallbackImage = (articleId: string, category: string): string => {
+  const fallbacks = FALLBACK_IMAGES[category] || FALLBACK_IMAGES.Local;
+  let hash = 0;
+  for (let i = 0; i < articleId.length; i++) {
+    hash = articleId.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const index = Math.abs(hash) % fallbacks.length;
+  return fallbacks[index];
+};
+
 export const NewsCard: React.FC<NewsCardProps> = React.memo(({ article, onPress }) => {
   const theme = useAppTheme();
   const scale = useSharedValue(1);
+
+  const fallbackUrl = React.useMemo(() => {
+    return getFallbackImage(article.id, article.category);
+  }, [article.id, article.category]);
+
+  const [imgSrc, setImgSrc] = React.useState<string>(() => {
+    const uri = article.thumbnail ? article.thumbnail.trim() : '';
+    if (!uri || uri.startsWith('//') || uri.includes('pixel') || uri.includes('analytics') || uri.includes('logo') || uri.includes('favicon')) {
+      return fallbackUrl;
+    }
+    return uri;
+  });
+
+  React.useEffect(() => {
+    const uri = article.thumbnail ? article.thumbnail.trim() : '';
+    if (!uri || uri.startsWith('//') || uri.includes('pixel') || uri.includes('analytics') || uri.includes('logo') || uri.includes('favicon')) {
+      setImgSrc(fallbackUrl);
+    } else {
+      setImgSrc(uri);
+    }
+  }, [article.thumbnail, fallbackUrl]);
 
   // Smooth Reanimated Spring scale effect on tap
   const animatedStyle = useAnimatedStyle(() => ({
@@ -58,14 +131,15 @@ export const NewsCard: React.FC<NewsCardProps> = React.memo(({ article, onPress 
         article.timestamp
       )}. Tap to read full story.`}
     >
-      <FastImage
+      <Image
         style={styles.image}
         source={{
-          uri: article.thumbnail,
-          priority: FastImage.priority.normal,
-          cache: FastImage.cacheControl.immutable,
+          uri: imgSrc,
         }}
-        resizeMode={FastImage.resizeMode.cover}
+        resizeMode="cover"
+        onError={() => {
+          setImgSrc(fallbackUrl);
+        }}
       />
       <View style={styles.contentContainer}>
         <View style={styles.metaRow}>

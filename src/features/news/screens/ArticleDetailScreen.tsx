@@ -3,17 +3,17 @@ import {
   StyleSheet,
   Text,
   View,
-  SafeAreaView,
   Pressable,
   TextInput,
   ActivityIndicator,
   Alert,
   KeyboardAvoidingView,
   Platform,
+  Image,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { FlatList } from 'react-native-gesture-handler';
 import { useRoute, useNavigation } from '@react-navigation/native';
-import FastImage from 'react-native-fast-image';
 import { useSelector } from 'react-redux';
 import { ArticleDetailScreenRouteProp, RootStackParamList } from '../../../core/navigation/types';
 import { useAppTheme } from '../../../core/theme';
@@ -21,6 +21,59 @@ import { selectArticleById, selectCurrentFeedItems } from '../store/newsSlice';
 import { useComments } from '../hooks/useComments';
 import { formatRelativeTime } from '../../../core/utils/time';
 import { Comment, NewsArticle } from '../../../core/types';
+
+const FALLBACK_IMAGES: Record<string, string[]> = {
+  Local: [
+    'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1449034446853-66c86144b0ad?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?q=80&w=600&auto=format&fit=crop',
+  ],
+  Sports: [
+    'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1461896836934-ffe607ba8211?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1517649763962-0c623066013b?q=80&w=600&auto=format&fit=crop',
+  ],
+  Politics: [
+    'https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=600&auto=format&fit=crop',
+  ],
+  Entertainment: [
+    'https://images.unsplash.com/photo-1470225620780-dba8ba36b745?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?q=80&w=600&auto=format&fit=crop',
+  ],
+  Business: [
+    'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1434030216411-0b793f4b4173?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1507679799987-c73779587ccf?q=80&w=600&auto=format&fit=crop',
+  ],
+  Technology: [
+    'https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=600&auto=format&fit=crop',
+  ],
+  Health: [
+    'https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?q=80&w=600&auto=format&fit=crop',
+  ],
+  International: [
+    'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?q=80&w=600&auto=format&fit=crop',
+    'https://images.unsplash.com/photo-1521295121783-8a321d551ad2?q=80&w=600&auto=format&fit=crop',
+  ],
+};
+
+const getFallbackImage = (articleId: string, category: string): string => {
+  const fallbacks = FALLBACK_IMAGES[category] || FALLBACK_IMAGES.Local;
+  let hash = 0;
+  for (let i = 0; i < articleId.length; i++) {
+    hash = articleId.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const index = Math.abs(hash) % fallbacks.length;
+  return fallbacks[index];
+};
 
 export const ArticleDetailScreen: React.FC = () => {
   const theme = useAppTheme();
@@ -30,6 +83,31 @@ export const ArticleDetailScreen: React.FC = () => {
 
   const article = useSelector(selectArticleById(articleId));
   const currentFeedItems = useSelector(selectCurrentFeedItems);
+
+  const fallbackUrl = React.useMemo(() => {
+    if (!article) return '';
+    return getFallbackImage(article.id, article.category);
+  }, [article?.id, article?.category]);
+
+  const [imgSrc, setImgSrc] = React.useState<string>(() => {
+    if (!article) return '';
+    const uri = article.thumbnail ? article.thumbnail.trim() : '';
+    if (!uri || uri.startsWith('//') || uri.includes('pixel') || uri.includes('analytics') || uri.includes('logo') || uri.includes('favicon')) {
+      return getFallbackImage(article.id, article.category);
+    }
+    return uri;
+  });
+
+  React.useEffect(() => {
+    if (article) {
+      const uri = article.thumbnail ? article.thumbnail.trim() : '';
+      if (!uri || uri.startsWith('//') || uri.includes('pixel') || uri.includes('analytics') || uri.includes('logo') || uri.includes('favicon')) {
+        setImgSrc(fallbackUrl);
+      } else {
+        setImgSrc(uri);
+      }
+    }
+  }, [article?.thumbnail, fallbackUrl]);
 
   // Hook managing paginated comments and optimistic posting
   const {
@@ -89,12 +167,12 @@ export const ArticleDetailScreen: React.FC = () => {
           },
         ]}
       >
-        <FastImage
+        <Image
           style={styles.avatar}
           source={{
             uri: item.authorAvatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(item.authorName)}`,
           }}
-          resizeMode={FastImage.resizeMode.cover}
+          resizeMode="cover"
         />
         <View style={styles.commentContent}>
           <View style={styles.commentMeta}>
@@ -118,13 +196,15 @@ export const ArticleDetailScreen: React.FC = () => {
     return (
       <View style={styles.headerContainer}>
         {/* Hero Image */}
-        <FastImage
+        <Image
           style={styles.heroImage}
           source={{
-            uri: article.thumbnail,
-            priority: FastImage.priority.high,
+            uri: imgSrc,
           }}
-          resizeMode={FastImage.resizeMode.cover}
+          resizeMode="cover"
+          onError={() => {
+            setImgSrc(fallbackUrl);
+          }}
         />
 
         <View style={styles.paddingContainer}>
@@ -171,7 +251,7 @@ export const ArticleDetailScreen: React.FC = () => {
                 <Pressable
                   key={rel.id}
                   style={[styles.relatedItem, { borderColor: theme.colors.border }]}
-                  onPress={() => navigation.navigate('ArticleDetail' as never, { articleId: rel.id } as never)}
+                  onPress={() => (navigation.navigate as any)('ArticleDetail', { articleId: rel.id })}
                 >
                   <Text style={[styles.relatedHeadline, { color: theme.colors.textPrimary, ...theme.typography.bodyMedium }]}>
                     {rel.title}

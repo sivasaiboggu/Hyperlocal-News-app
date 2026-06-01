@@ -1,6 +1,5 @@
 import React from 'react';
-import { Linking, Pressable, StyleSheet, Text, View } from 'react-native';
-import FastImage from 'react-native-fast-image';
+import { Image, Linking, Pressable, StyleSheet, Text, View } from 'react-native';
 import { AdContent } from '../../../core/types';
 import { useAppTheme } from '../../../core/theme';
 
@@ -55,13 +54,12 @@ export const AdCard: React.FC<AdCardProps> = React.memo(({ ad }) => {
             {ad.description}
           </Text>
         </View>
-        <FastImage
+        <Image
           style={styles.image}
           source={{
             uri: ad.image,
-            priority: FastImage.priority.low,
           }}
-          resizeMode={FastImage.resizeMode.cover}
+          resizeMode="cover"
         />
       </View>
 

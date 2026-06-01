@@ -5,7 +5,8 @@ export type CategoryType =
   | 'Entertainment'
   | 'Business'
   | 'Technology'
-  | 'Health';
+  | 'Health'
+  | 'International';
 
 export interface NewsArticle {
   id: string;

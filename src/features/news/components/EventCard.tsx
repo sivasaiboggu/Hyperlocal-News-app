@@ -1,6 +1,5 @@
 import React from 'react';
-import { Pressable, StyleSheet, Text, View, Alert } from 'react-native';
-import FastImage from 'react-native-fast-image';
+import { Image, Pressable, StyleSheet, Text, View, Alert } from 'react-native';
 import { LocalEvent } from '../../../core/types';
 import { useAppTheme } from '../../../core/theme';
 
@@ -32,13 +31,12 @@ export const EventCard: React.FC<EventCardProps> = React.memo(({ event }) => {
       accessible={true}
       accessibilityLabel={`Community Event: ${event.title}. Happening on ${event.date} at ${event.location}. Description: ${event.description}. Double tap to register.`}
     >
-      <FastImage
+      <Image
         style={styles.image}
         source={{
           uri: event.image,
-          priority: FastImage.priority.normal,
         }}
-        resizeMode={FastImage.resizeMode.cover}
+        resizeMode="cover"
       />
       
       <View style={styles.paddingContainer}>

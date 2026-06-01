@@ -8,6 +8,7 @@ export const MOCK_CATEGORIES: CategoryType[] = [
   'Business',
   'Technology',
   'Health',
+  'International',
 ];
 
 // Helper to generate comments
@@ -130,6 +131,16 @@ export const generateMockFeed = (category: CategoryType, page: number = 1): Feed
       'Organic Rooftop Farms Supply Fresh Produce to Senior Centers',
       'Nutritionists Host Cooking Classes Focused on Budget Meals',
     ],
+    International: [
+      'Global Climate Summit Reaches Historic Carbon Emissions Agreement',
+      'International Space Agency Launches Mars Habitat Mission',
+      'Major Trade Alliance Formed Between Top Developing Nations',
+      'Global Tech Conference Highlights AI Breakthroughs in Medicine',
+      'World Health Assembly Proposes Pandemic Response Framework',
+      'Historic Peace Talks Begin in Geneva for Middle East Peace',
+      'International Olympic Committee Announces Host for Winter Games',
+      'Global Inflation Rates Decline to Pre-Pandemic Levels',
+    ],
   };
 
   const headlines = categoryHeadlines[category] || categoryHeadlines.Local;
@@ -205,6 +216,10 @@ export const generateMockFeed = (category: CategoryType, page: number = 1): Feed
         Health: [
           'https://images.unsplash.com/photo-1506126613408-eca07ce68773?q=80&w=600&auto=format&fit=crop',
           'https://images.unsplash.com/photo-1532938911079-1b06ac7ceec7?q=80&w=600&auto=format&fit=crop',
+        ],
+        International: [
+          'https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=600&auto=format&fit=crop',
+          'https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?q=80&w=600&auto=format&fit=crop',
         ],
       };
       

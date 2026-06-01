@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from 'react';
-import { FlatList, Pressable, StyleSheet, Text, View, Dimensions } from 'react-native';
+import { ScrollView, Pressable, StyleSheet, Text, View, Dimensions } from 'react-native';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -15,60 +15,81 @@ interface CategorySliderProps {
 }
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
-const ITEM_WIDTH = 110; // Fixed width for clean snaps and paging alignments
+const ITEM_WIDTH = 105; // Spaced beautifully
+const UNDERLINE_WIDTH = 48;
+const START_PADDING = 16;
 
 export const CategorySlider: React.FC<CategorySliderProps> = React.memo(
   ({ categories, selectedCategory, onSelectCategory }) => {
     const theme = useAppTheme();
-    const flatListRef = useRef<FlatList<CategoryType>>(null);
+    const scrollViewRef = useRef<ScrollView>(null);
 
-    // Side effect to auto-center the active category item when selected
+    const activeIndex = categories.indexOf(selectedCategory);
+
+    // Shared animated value for the gliding underline offset
+    const indicatorTranslateX = useSharedValue(
+      START_PADDING + (activeIndex !== -1 ? activeIndex : 0) * ITEM_WIDTH + (ITEM_WIDTH - UNDERLINE_WIDTH) / 2
+    );
+
     useEffect(() => {
-      const activeIndex = categories.indexOf(selectedCategory);
-      if (activeIndex !== -1 && flatListRef.current) {
-        flatListRef.current.scrollToIndex({
-          index: activeIndex,
-          animated: true,
-          viewPosition: 0.5, // Centers the item in horizontal frame
-        });
-      }
-    }, [selectedCategory, categories]);
+      if (activeIndex !== -1) {
+        // Glides the underline smoothly with spring physics
+        indicatorTranslateX.value = withSpring(
+          START_PADDING + activeIndex * ITEM_WIDTH + (ITEM_WIDTH - UNDERLINE_WIDTH) / 2,
+          { damping: 16, stiffness: 140 }
+        );
 
-    const renderItem = ({ item, index }: { item: CategoryType; index: number }) => {
-      const isActive = item === selectedCategory;
-      return (
-        <CategoryItem
-          item={item}
-          isActive={isActive}
-          onPress={() => onSelectCategory(item)}
-          theme={theme}
-        />
-      );
-    };
+        // Centers the selected tab in the viewport
+        if (scrollViewRef.current) {
+          const targetOffset = START_PADDING + activeIndex * ITEM_WIDTH - SCREEN_WIDTH / 2 + ITEM_WIDTH / 2;
+          scrollViewRef.current.scrollTo({
+            x: Math.max(0, targetOffset),
+            y: 0,
+            animated: true,
+          });
+        }
+      }
+    }, [activeIndex, indicatorTranslateX]);
+
+    const animatedUnderlineStyle = useAnimatedStyle(() => ({
+      transform: [{ translateX: indicatorTranslateX.value }],
+    }));
 
     return (
       <View style={[styles.container, { backgroundColor: theme.colors.surface, borderBottomColor: theme.colors.border }]}>
-        <FlatList
-          ref={flatListRef}
-          data={categories}
-          renderItem={renderItem}
-          keyExtractor={(item) => item}
+        <ScrollView
+          ref={scrollViewRef}
           horizontal
           showsHorizontalScrollIndicator={false}
-          snapToInterval={ITEM_WIDTH}
-          snapToAlignment="center"
           decelerationRate="fast"
-          // Offsets so the first/last items can center perfectly with partial items visible on edges
           contentContainerStyle={{
-            paddingHorizontal: SCREEN_WIDTH / 2 - ITEM_WIDTH / 2,
+            paddingHorizontal: START_PADDING,
             alignItems: 'center',
+            position: 'relative',
           }}
-          getItemLayout={(_, index) => ({
-            length: ITEM_WIDTH,
-            offset: ITEM_WIDTH * index,
-            index,
+        >
+          {/* Shared Gliding Underline */}
+          <Animated.View
+            style={[
+              styles.underline,
+              { backgroundColor: theme.colors.accent },
+              animatedUnderlineStyle,
+            ]}
+          />
+
+          {categories.map((category) => {
+            const isActive = category === selectedCategory;
+            return (
+              <CategoryItem
+                key={category}
+                category={category}
+                isActive={isActive}
+                onPress={() => onSelectCategory(category)}
+                theme={theme}
+              />
+            );
           })}
-        />
+        </ScrollView>
       </View>
     );
   }
@@ -76,23 +97,25 @@ export const CategorySlider: React.FC<CategorySliderProps> = React.memo(
 
 CategorySlider.displayName = 'CategorySlider';
 
-// Specialized individual category item with smooth scale & spring transitions
 interface CategoryItemProps {
-  item: CategoryType;
+  category: CategoryType;
   isActive: boolean;
   onPress: () => void;
   theme: any;
 }
 
-const CategoryItem: React.FC<CategoryItemProps> = React.memo(({ item, isActive, onPress, theme }) => {
-  const underlineScaleX = useSharedValue(isActive ? 1 : 0);
+const CategoryItem: React.FC<CategoryItemProps> = React.memo(({ category, isActive, onPress, theme }) => {
+  const textScale = useSharedValue(isActive ? 1.08 : 1);
+  const textOpacity = useSharedValue(isActive ? 1 : 0.65);
 
   useEffect(() => {
-    underlineScaleX.value = withSpring(isActive ? 1 : 0, { damping: 15, stiffness: 180 });
-  }, [isActive, underlineScaleX]);
+    textScale.value = withSpring(isActive ? 1.08 : 1, { damping: 15, stiffness: 180 });
+    textOpacity.value = withSpring(isActive ? 1 : 0.65, { damping: 15, stiffness: 180 });
+  }, [isActive, textScale, textOpacity]);
 
-  const animatedUnderlineStyle = useAnimatedStyle(() => ({
-    transform: [{ scaleX: underlineScaleX.value }],
+  const animatedTextStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: textScale.value }],
+    opacity: textOpacity.value,
   }));
 
   return (
@@ -102,27 +125,22 @@ const CategoryItem: React.FC<CategoryItemProps> = React.memo(({ item, isActive, 
       accessible={true}
       accessibilityRole="tab"
       accessibilityState={{ selected: isActive }}
-      accessibilityLabel={`Category Tab: ${item}. ${isActive ? 'Currently Active' : 'Tap to select'}`}
+      accessibilityLabel={`Category Tab: ${category}. ${isActive ? 'Currently Active' : 'Tap to select'}`}
     >
-      <Text
+      <Animated.Text
         style={[
           styles.text,
           {
             color: isActive ? theme.colors.textPrimary : theme.colors.textSecondary,
-            fontWeight: isActive ? '700' : '500',
-            fontSize: isActive ? 15 : 14,
+            fontWeight: isActive ? '800' : '600',
+            fontSize: 14,
+            fontFamily: theme.typography.bodyLarge.fontFamily,
           },
+          animatedTextStyle,
         ]}
       >
-        {item}
-      </Text>
-      <Animated.View
-        style={[
-          styles.underline,
-          { backgroundColor: theme.colors.accent },
-          animatedUnderlineStyle,
-        ]}
-      />
+        {category}
+      </Animated.Text>
     </Pressable>
   );
 });
@@ -140,7 +158,6 @@ const styles = StyleSheet.create({
     height: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    position: 'relative',
   },
   text: {
     textAlign: 'center',
@@ -148,8 +165,9 @@ const styles = StyleSheet.create({
   underline: {
     position: 'absolute',
     bottom: 2,
-    width: 48,
-    height: 3,
+    width: UNDERLINE_WIDTH,
+    height: 3.5,
     borderRadius: 2,
   },
 });
+

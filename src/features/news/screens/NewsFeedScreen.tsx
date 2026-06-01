@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, Text, View, Pressable, ActivityIndicator, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, Pressable, ActivityIndicator } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { FlashList } from '@shopify/flash-list';
 import { useNavigation } from '@react-navigation/native';
 import { NewsFeedScreenNavigationProp } from '../../../core/navigation/types';
@@ -10,6 +11,8 @@ import { NewsFeedSkeleton } from '../components/NewsFeedSkeleton';
 import { CardFactory } from '../factory/CardFactory';
 import { OfflineBanner } from '../components/OfflineBanner';
 import { FeedItem } from '../../../core/types';
+
+const TypedFlashList = FlashList as any;
 
 export const NewsFeedScreen: React.FC = () => {
   const theme = useAppTheme();
@@ -108,11 +111,11 @@ export const NewsFeedScreen: React.FC = () => {
           {loading && feedItems.length === 0 ? (
             <NewsFeedSkeleton />
           ) : (
-            <FlashList
+            <TypedFlashList
               data={feedItems}
               renderItem={renderFeedItem}
               estimatedItemSize={140}
-              keyExtractor={(item) => item.id}
+              keyExtractor={(item: any) => item.id}
               onRefresh={handleRefresh}
               refreshing={isRefreshing}
               onEndReached={handleLoadMore}

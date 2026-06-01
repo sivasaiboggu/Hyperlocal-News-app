@@ -1,4 +1,7 @@
 {
-  "name": "hyperlocalnewsapp",
-  "displayName": "Hyperlocal News"
+  "expo": {
+    "name": "Hyperlocal News",
+    "slug": "hyperlocal-news-app",
+    "version": "1.0.0"
+  }
 }

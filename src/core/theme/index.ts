@@ -1,4 +1,4 @@
-import { useColorScheme } from 'react-native';
+import { Platform, useColorScheme } from 'react-native';
 
 export interface ThemeColors {
   primary: string;
@@ -20,6 +20,7 @@ export interface TypographyStyle {
   fontSize: number;
   lineHeight: number;
   fontWeight: '300' | '400' | '500' | '600' | '700' | '800';
+  fontFamily: string;
   letterSpacing?: number;
 }
 
@@ -130,51 +131,65 @@ const radius: ThemeRadius = {
   full: 9999,
 };
 
+const fonts = {
+  serif: Platform.select({ ios: 'Georgia', android: 'serif', default: 'serif' }) || 'serif',
+  sans: Platform.select({ ios: 'System', android: 'sans-serif', default: 'sans-serif' }) || 'sans-serif',
+  sansMedium: Platform.select({ ios: 'System', android: 'sans-serif-medium', default: 'sans-serif' }) || 'sans-serif',
+};
+
 // Accessibility-First Typography System (Responsive Scale hints)
 const typography: ThemeTypography = {
   h1: {
     fontSize: 28,
     lineHeight: 34,
     fontWeight: '800',
+    fontFamily: fonts.serif,
     letterSpacing: -0.5,
   },
   h2: {
     fontSize: 22,
     lineHeight: 28,
     fontWeight: '700',
+    fontFamily: fonts.serif,
     letterSpacing: -0.3,
   },
   h3: {
     fontSize: 18,
     lineHeight: 24,
     fontWeight: '600',
+    fontFamily: fonts.serif,
     letterSpacing: -0.2,
   },
   bodyLarge: {
     fontSize: 16,
     lineHeight: 24,
     fontWeight: '400',
+    fontFamily: fonts.sans,
   },
   bodyMedium: {
     fontSize: 14,
     lineHeight: 20,
     fontWeight: '400',
+    fontFamily: fonts.sans,
   },
   bodySmall: {
     fontSize: 12,
     lineHeight: 16,
     fontWeight: '400',
+    fontFamily: fonts.sans,
   },
   caption: {
     fontSize: 11,
     lineHeight: 14,
     fontWeight: '500',
+    fontFamily: fonts.sansMedium,
     letterSpacing: 0.5,
   },
   button: {
     fontSize: 14,
     lineHeight: 20,
     fontWeight: '600',
+    fontFamily: fonts.sansMedium,
     letterSpacing: 0.2,
   },
 };

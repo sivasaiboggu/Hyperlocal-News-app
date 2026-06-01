@@ -39,7 +39,7 @@ describe('News Redux Slice Reducers', () => {
 
   it('should successfully append items and pages under category mapping key', () => {
     const mockItems: FeedItem[] = [
-      { id: '1', type: 'news', data: { id: '1', title: 'Test Headline', content: '...', category: 'Local', likes: 1, views: 1, source: '...', timestamp: Date.now(), commentsCount: 0 } },
+      { id: '1', type: 'news', data: { id: '1', title: 'Test Headline', content: '...', thumbnail: '...', category: 'Local', likes: 1, views: 1, source: '...', timestamp: Date.now(), commentsCount: 0 } },
     ];
 
     const nextState = newsReducer(
