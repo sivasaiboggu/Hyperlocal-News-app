@@ -1,22 +1,33 @@
-# Hyperlocal News App — React Native Mobile Module
+# HYPER LOCAL NEWS (HLN) — React Native Mobile Module
 
-An enterprise-grade, high-performance Hyperlocal News feature module for React Native, engineered with **Clean Feature-Driven Architecture** and premium **Light/Dark theme support**.
+An enterprise-grade, high-performance hyperlocal news mobile application for React Native, engineered with **Clean Feature-Driven Architecture**, custom **Light/Dark theme support**, and a buttery-smooth 60fps feed catalog.
 
-This codebase is a showcase of advanced architectural design patterns, offline-first data structures, and buttery-smooth 60fps lists optimized for millions of active users.
+---
+
+## 📱 Screenshots of UI (Chronological Flow)
+
+| 1. Onboarding Splash Onset | 2. Live Category Recycler | 3. Article Reading Hero |
+| :---: | :---: | :---: |
+| ![1_welcome_splash](screenshots/1_welcome_splash.png) | ![2_sports_feed](screenshots/2_sports_feed.png) | ![3_article_detail_top](screenshots/3_article_detail_top.png) |
+
+| 4. Contextual Related Stories | 5. Live Community Discussions |
+| :---: | :---: |
+| ![4_article_detail_middle](screenshots/4_article_detail_middle.png) | ![5_article_detail_comments](screenshots/5_article_detail_comments.png) |
 
 ---
 
 ## 🚀 Key Features
 
-* 🗂 **Horizontal Category Snapping Slider**: Premium container-presenter slider utilizing layout scrolling index centers and custom animated spring underlines.
-* ⚡ **Dynamic Recycler Feed (60 FPS)**: Powered by Shopify’s high-frequency recycler list (`@shopify/flash-list`) which drastically reduces memory consumption on long lists.
-* 🏭 **Feed Card Factory**: Resolves cards dynamically via a compile-safe static factory mapping news headlines, warm sponsored advertisements, and local community events.
-* 📦 **Decoupled Repositories**: Data layers abstracting local mockup generators (with simulated delay) and production REST APIs behind standard interfaces.
-* 🛡 **Strategy-Pattern Error Recovery**: Multi-layered resilient pipelines combining **Exponential Backoff Retries**, **Storage Caching fallback**, and **Visual UI translate handlers**.
+* 🚀 **Automated Splash Page & Progress Tracker**: Beautiful onboarding screen featuring a centered modern badge, responsive tracking subtitle, and a spring-loaded loading bar tracking from 0% to 100% over 2.2 seconds before automatically transitioning to the feed.
+* 🗂 **Gliding Tab Category Slider**: Spaced horizontal category selector where the active tab expands, and a shared Reanimated indicator underline glides smoothly beneath the selected tab with spring-snapping physics.
+* ⚡ **Dynamic Recycler Feed (60 FPS)**: Powered by Shopify’s high-frequency recycler list (`@shopify/flash-list`) which reduces memory footprint on long scrolling sessions.
+* 🌐 **Direct Client-Side RSS XML Parser**: Requests live Google News RSS feeds directly (avoiding cached proxy servers), parsing real-time headlines, publisher details, and extracting real thumbnail images from XML CDATA descriptions natively.
+* 📍 **Automated User Geolocation**: Requests GPS coordinate permission at runtime using `expo-location` and reverse-geocodes it into the actual Indian city name (e.g. *Gooty*) to load local town bulletins.
+* 🏭 **Feed Card Factory**: Resolves cards dynamically via a compile-safe static factory mapping news headlines, sponsored advertisements, and local community events.
+* 🛡 **Strategy-Pattern Error Recovery**: Combines **Exponential Backoff Retries** (RetryStrategy), **Storage Caching fallback** (AsyncStorage), and **Visual UI error handlers** to guarantee offline-first reliability.
 * 💬 **Optimistic Comments Submissions**: A standalone comment thread supporting lazy paging and instant UI optimistic rendering with automatic rollback on network failure.
-* 🌓 **Premium Dynamic Colors**: Type-safe themes containing responsive typographic scales, dynamic shadows, and system light/dark scheme bindings.
+* 🌓 **Premium Theme Engine**: Type-safe themes containing responsive typographic scales (Georgia Serif & System Sans), dynamic shadows, and system light/dark scheme bindings.
 * 🧪 **Robust Automated Test Foundation**: Complete Jest unit test coverage covering repositories, state slices, factories, and retry backoffs.
-* 📱 **Expo Go Ready**: Clean, optimized configurations to scan, bundle, and preview the interface instantly.
 
 ---
 
@@ -39,23 +50,24 @@ This module implements key production-grade software design patterns:
 ```
 src/
 ├── core/
-│   ├── navigation/        # AppNavigator (Stack), types (Type-safe parameters)
+│   ├── navigation/        # AppNavigator (Stack with custom logo badge), types (Type-safe parameters)
 │   ├── theme/             # Light/Dark dynamic design palettes, dynamic scales
 │   ├── constants/         # USE_MOCK_DATA flags, retry counts, storage keys
 │   ├── utils/             # Relative time formatting helper libraries
 │   ├── types/             # Domain entities (NewsArticle, Comment, FeedItem)
 │   └── mocks/             # High-fidelity mock updates and community logs
+│   └── utils/time.ts      # Relative time formatting helper libraries
 └── features/
     └── news/
         ├── components/    # CategorySlider, cards, skeletons, and offline banners
         ├── containers/    # CategoryContainer
-        ├── screens/       # NewsFeedScreen, ArticleDetailScreen
-        ├── repository/    # INewsRepository, Mock/API endpoints, singleton provider
+        ├── screens/       # NewsFeedScreen, ArticleDetailScreen, WelcomeScreen
+        ├── repository/    # INewsRepository, Mock/API endpoints, client-side XML parser
         ├── factory/       # CardFactory dynamic resolver
         ├── strategies/    # ErrorStrategy base, Retry, CacheFallback, ErrorUI strategy
         ├── hooks/         # useNewsFeed and useComments hooks
         ├── store/         # RTK configurations and newsSlice
-        └── __tests__/     #jest unit test collections
+        └── __tests__/     # Jest unit test collections
 ```
 
 ---
@@ -81,9 +93,9 @@ npm test
 ```
 
 ### 4. Boot the App in Expo Go
-Start the Metro bundler and generate the QR code:
+Start the Metro bundler and generate the QR code using your computer's active Wi-Fi IP address:
 ```bash
-npm start
+$env:REACT_NATIVE_PACKAGER_HOSTNAME="YOUR_PC_WIFI_IP"; npx expo start --clear
 ```
 1. Download the **Expo Go** app on your phone.
 2. Scan the terminal's QR code.
