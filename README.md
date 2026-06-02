@@ -15,7 +15,7 @@ An enterprise-grade, high-performance hyperlocal news mobile application for Rea
     </tr>
     <tr>
       <td><img src="screenshots/1_welcome_splash.jpeg" width="260" alt="1_welcome_splash" /></td>
-      <td><img src="screenshots/2_sports_feed.jpeg" width="260" alt="2_sports_feed" /></td>
+      <td><img src="screenshots/2_sports_feed.png" width="260" alt="2_sports_feed" /></td>
       <td><img src="screenshots/3_article_detail_top.jpeg" width="260" alt="3_article_detail_top" /></td>
     </tr>
     <tr>
