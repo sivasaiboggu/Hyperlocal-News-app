@@ -21,7 +21,7 @@ An enterprise-grade, high-performance hyperlocal news mobile application for Rea
     <tr>
       <td align="center"><b>4. Contextual Related Stories</b></td>
       <td align="center"><b>5. Live Community Discussions</b></td>
-      <td></td>
+      <td align="center"><b>6. Interactive Dark Mode</b></td>
     </tr>
     <tr>
       <td><img src="screenshots/4_article_detail_middle.jpeg" width="260" alt="4_article_detail_middle" /></td>
