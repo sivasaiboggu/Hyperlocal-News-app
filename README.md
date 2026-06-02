@@ -26,7 +26,7 @@ An enterprise-grade, high-performance hyperlocal news mobile application for Rea
     <tr>
       <td><img src="screenshots/4_article_detail_middle.jpeg" width="260" alt="4_article_detail_middle" /></td>
       <td><img src="screenshots/5_article_detail_comments.jpeg" width="260" alt="5_article_detail_comments" /></td>
-      <td></td>
+      <td><img src="screenshots/6_dark_theme.jpeg" width="260" alt="6_dark_theme" /></td>
     </tr>
   </table>
 </div>
