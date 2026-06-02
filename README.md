@@ -8,7 +8,7 @@ An enterprise-grade, high-performance hyperlocal news mobile application for Rea
 
 | 1. Onboarding Splash Onset | 2. Live Category Recycler | 3. Article Reading Hero |
 | :---: | :---: | :---: |
-| ![1_welcome_splash](screenshots/1_welcome_splash.png) | ![2_sports_feed](screenshots/2_sports_feed.png) | ![3_article_detail_top](screenshots/3_article_detail_top.png) |
+| ![1_welcome_splash](screenshots/1_welcome_splash.jpeg) | ![2_sports_feed](screenshots/2_sports_feed.png) | ![3_article_detail_top](screenshots/3_article_detail_top.png) |
 
 | 4. Contextual Related Stories | 5. Live Community Discussions |
 | :---: | :---: |
