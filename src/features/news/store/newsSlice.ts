@@ -16,6 +16,7 @@ export interface NewsState {
   };
   pagination: Record<string, { page: number; totalPages: number }>; // keyed by CategoryType
   commentsPagination: Record<string, { page: number; totalPages: number }>; // keyed by ArticleId
+  themeMode: 'light' | 'dark' | 'system';
 }
 
 const initialState: NewsState = {
@@ -33,6 +34,7 @@ const initialState: NewsState = {
   },
   pagination: {},
   commentsPagination: {},
+  themeMode: 'system',
 };
 
 export const newsSlice = createSlice({
@@ -127,6 +129,9 @@ export const newsSlice = createSlice({
       state.errors.articles = null;
       state.errors.comments = null;
     },
+    setThemeMode: (state, action: PayloadAction<'light' | 'dark' | 'system'>) => {
+      state.themeMode = action.payload;
+    },
   },
 });
 
@@ -141,6 +146,7 @@ export const {
   addCommentOptimistic,
   addCommentFailure,
   clearErrors,
+  setThemeMode,
 } = newsSlice.actions;
 
 // Base State Selector
@@ -150,6 +156,11 @@ const selectNewsState = (state: { news: NewsState }) => state.news;
 export const selectSelectedCategory = createSelector(
   [selectNewsState],
   (news) => news.selectedCategory
+);
+
+export const selectThemeMode = createSelector(
+  [selectNewsState],
+  (news) => news.themeMode
 );
 
 export const selectCurrentFeedItems = createSelector(

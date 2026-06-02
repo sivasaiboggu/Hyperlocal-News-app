@@ -6,13 +6,30 @@ An enterprise-grade, high-performance hyperlocal news mobile application for Rea
 
 ## 📱 Screenshots of UI (Chronological Flow)
 
-| 1. Onboarding Splash Onset | 2. Live Category Recycler | 3. Article Reading Hero |
-| :---: | :---: | :---: |
-| <img src="screenshots/1_welcome_splash.jpeg" width="280" alt="1_welcome_splash" /> | <img src="screenshots/2_sports_feed.jpeg" width="280" alt="2_sports_feed" /> | <img src="screenshots/3_article_detail_top.jpeg" width="280" alt="3_article_detail_top" /> |
-
-| 4. Contextual Related Stories | 5. Live Community Discussions |
-| :---: | :---: |
-| <img src="screenshots/4_article_detail_middle.jpeg" width="280" alt="4_article_detail_middle" /> | <img src="screenshots/5_article_detail_comments.jpeg" width="280" alt="5_article_detail_comments" /> |
+<div align="center">
+  <table>
+    <tr>
+      <td align="center"><b>1. Onboarding Splash Onset</b></td>
+      <td align="center"><b>2. Live Category Recycler</b></td>
+      <td align="center"><b>3. Article Reading Hero</b></td>
+    </tr>
+    <tr>
+      <td><img src="screenshots/1_welcome_splash.jpeg" width="280" alt="1_welcome_splash" /></td>
+      <td><img src="screenshots/2_sports_feed.jpeg" width="280" alt="2_sports_feed" /></td>
+      <td><img src="screenshots/3_article_detail_top.jpeg" width="280" alt="3_article_detail_top" /></td>
+    </tr>
+    <tr>
+      <td align="center"><b>4. Contextual Related Stories</b></td>
+      <td align="center"><b>5. Live Community Discussions</b></td>
+      <td></td>
+    </tr>
+    <tr>
+      <td><img src="screenshots/4_article_detail_middle.jpeg" width="280" alt="4_article_detail_middle" /></td>
+      <td><img src="screenshots/5_article_detail_comments.jpeg" width="280" alt="5_article_detail_comments" /></td>
+      <td></td>
+    </tr>
+  </table>
+</div>
 
 ---
 

@@ -1,11 +1,13 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootStackParamList } from './types';
 import { WelcomeScreen } from '../../features/news/screens/WelcomeScreen';
 import { NewsFeedScreen } from '../../features/news/screens/NewsFeedScreen';
 import { ArticleDetailScreen } from '../../features/news/screens/ArticleDetailScreen';
 import { useAppTheme } from '../theme';
+import { setThemeMode, selectThemeMode } from '../../features/news/store/newsSlice';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -29,6 +31,56 @@ const HeaderLogo: React.FC = () => {
         </Text>
       </View>
     </View>
+  );
+};
+
+// Dynamic interactive theme switcher
+const ThemeToggle: React.FC = () => {
+  const theme = useAppTheme();
+  const dispatch = useDispatch();
+  const themeMode = useSelector(selectThemeMode);
+
+  const handleToggle = () => {
+    if (themeMode === 'system') {
+      dispatch(setThemeMode('light'));
+    } else if (themeMode === 'light') {
+      dispatch(setThemeMode('dark'));
+    } else {
+      dispatch(setThemeMode('system'));
+    }
+  };
+
+  const getThemeEmoji = () => {
+    if (themeMode === 'system') return '🌓';
+    if (themeMode === 'light') return '☀️';
+    return '🌙';
+  };
+
+  const getThemeLabel = () => {
+    if (themeMode === 'system') return 'Auto';
+    if (themeMode === 'light') return 'Light';
+    return 'Dark';
+  };
+
+  return (
+    <TouchableOpacity
+      onPress={handleToggle}
+      style={[
+        navStyles.toggleButton,
+        {
+          backgroundColor: theme.colors.border,
+          borderColor: theme.colors.border,
+        }
+      ]}
+      activeOpacity={0.7}
+      accessibilityRole="button"
+      accessibilityLabel={`Current theme is ${themeMode}. Tap to change.`}
+    >
+      <Text style={navStyles.toggleEmoji}>{getThemeEmoji()}</Text>
+      <Text style={[navStyles.toggleText, { color: theme.colors.textPrimary }]}>
+        {getThemeLabel()}
+      </Text>
+    </TouchableOpacity>
   );
 };
 
@@ -72,6 +124,7 @@ export const AppNavigator: React.FC = () => {
         options={{
           headerTitle: () => <HeaderLogo />,
           headerTitleAlign: 'center',
+          headerRight: () => <ThemeToggle />,
         }}
       />
       <Stack.Screen
@@ -130,6 +183,25 @@ const navStyles = StyleSheet.create({
     fontWeight: '800',
     letterSpacing: 3,
     marginTop: -2,
+  },
+  toggleButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+    marginRight: 15,
+    borderWidth: 1,
+  },
+  toggleEmoji: {
+    fontSize: 14,
+    marginRight: 4,
+  },
+  toggleText: {
+    fontSize: 10,
+    fontWeight: '700',
+    textTransform: 'uppercase',
+    letterSpacing: 0.5,
   },
 });
 

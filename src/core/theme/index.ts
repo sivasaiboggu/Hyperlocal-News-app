@@ -1,4 +1,6 @@
 import { Platform, useColorScheme } from 'react-native';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../features/news/store';
 
 export interface ThemeColors {
   primary: string;
@@ -231,6 +233,13 @@ export const darkTheme: Theme = {
 };
 
 export const useAppTheme = (): Theme => {
-  const scheme = useColorScheme();
-  return scheme === 'dark' ? darkTheme : lightTheme;
+  const systemScheme = useColorScheme();
+  try {
+    const themeMode = useSelector((state: RootState) => state.news?.themeMode || 'system');
+    if (themeMode === 'dark') return darkTheme;
+    if (themeMode === 'light') return lightTheme;
+    return systemScheme === 'dark' ? darkTheme : lightTheme;
+  } catch (e) {
+    return systemScheme === 'dark' ? darkTheme : lightTheme;
+  }
 };

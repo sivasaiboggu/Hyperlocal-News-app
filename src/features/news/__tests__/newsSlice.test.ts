@@ -24,6 +24,7 @@ describe('News Redux Slice Reducers', () => {
     },
     pagination: {},
     commentsPagination: {},
+    themeMode: 'system',
   };
 
   it('should handle category selection changes and reset states correctly', () => {
