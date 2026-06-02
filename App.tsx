@@ -9,14 +9,8 @@ import { AppNavigator } from './src/core/navigation/AppNavigator';
 import { lightTheme, darkTheme } from './src/core/theme';
 
 function AppContent() {
-  const systemDarkMode = useColorScheme() === 'dark';
-  const themeMode = useSelector((state: RootState) => state.news?.themeMode || 'system');
-  const activeTheme = themeMode === 'dark' 
-    ? darkTheme 
-    : themeMode === 'light' 
-      ? lightTheme 
-      : (systemDarkMode ? darkTheme : lightTheme);
-      
+  const themeMode = useSelector((state: RootState) => state.news?.themeMode || 'light');
+  const activeTheme = themeMode === 'dark' ? darkTheme : lightTheme;
   const isDark = activeTheme.dark;
 
   const navigationTheme = isDark

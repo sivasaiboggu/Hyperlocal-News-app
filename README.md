@@ -14,9 +14,9 @@ An enterprise-grade, high-performance hyperlocal news mobile application for Rea
       <td align="center"><b>3. Article Reading Hero</b></td>
     </tr>
     <tr>
-      <td><img src="screenshots/1_welcome_splash.jpeg" width="280" alt="1_welcome_splash" /></td>
-      <td><img src="screenshots/2_sports_feed.jpeg" width="280" alt="2_sports_feed" /></td>
-      <td><img src="screenshots/3_article_detail_top.jpeg" width="280" alt="3_article_detail_top" /></td>
+      <td><img src="screenshots/1_welcome_splash.jpeg" width="260" alt="1_welcome_splash" /></td>
+      <td><img src="screenshots/2_sports_feed.jpeg" width="260" alt="2_sports_feed" /></td>
+      <td><img src="screenshots/3_article_detail_top.jpeg" width="260" alt="3_article_detail_top" /></td>
     </tr>
     <tr>
       <td align="center"><b>4. Contextual Related Stories</b></td>
@@ -24,8 +24,8 @@ An enterprise-grade, high-performance hyperlocal news mobile application for Rea
       <td></td>
     </tr>
     <tr>
-      <td><img src="screenshots/4_article_detail_middle.jpeg" width="280" alt="4_article_detail_middle" /></td>
-      <td><img src="screenshots/5_article_detail_comments.jpeg" width="280" alt="5_article_detail_comments" /></td>
+      <td><img src="screenshots/4_article_detail_middle.jpeg" width="260" alt="4_article_detail_middle" /></td>
+      <td><img src="screenshots/5_article_detail_comments.jpeg" width="260" alt="5_article_detail_comments" /></td>
       <td></td>
     </tr>
   </table>
@@ -43,7 +43,7 @@ An enterprise-grade, high-performance hyperlocal news mobile application for Rea
 * 🏭 **Feed Card Factory**: Resolves cards dynamically via a compile-safe static factory mapping news headlines, sponsored advertisements, and local community events.
 * 🛡 **Strategy-Pattern Error Recovery**: Combines **Exponential Backoff Retries** (RetryStrategy), **Storage Caching fallback** (AsyncStorage), and **Visual UI error handlers** to guarantee offline-first reliability.
 * 💬 **Optimistic Comments Submissions**: A standalone comment thread supporting lazy paging and instant UI optimistic rendering with automatic rollback on network failure.
-* 🌓 **Premium Theme Engine**: Type-safe themes containing responsive typographic scales (Georgia Serif & System Sans), dynamic shadows, and system light/dark scheme bindings.
+* 🌓 **Premium Theme Engine**: Type-safe themes containing responsive typographic scales (Georgia Serif & System Sans), dynamic shadows, and interactive light/dark theme selection.
 * 🧪 **Robust Automated Test Foundation**: Complete Jest unit test coverage covering repositories, state slices, factories, and retry backoffs.
 
 ---

@@ -16,7 +16,7 @@ export interface NewsState {
   };
   pagination: Record<string, { page: number; totalPages: number }>; // keyed by CategoryType
   commentsPagination: Record<string, { page: number; totalPages: number }>; // keyed by ArticleId
-  themeMode: 'light' | 'dark' | 'system';
+  themeMode: 'light' | 'dark';
 }
 
 const initialState: NewsState = {
@@ -34,7 +34,7 @@ const initialState: NewsState = {
   },
   pagination: {},
   commentsPagination: {},
-  themeMode: 'system',
+  themeMode: 'light',
 };
 
 export const newsSlice = createSlice({
@@ -129,7 +129,7 @@ export const newsSlice = createSlice({
       state.errors.articles = null;
       state.errors.comments = null;
     },
-    setThemeMode: (state, action: PayloadAction<'light' | 'dark' | 'system'>) => {
+    setThemeMode: (state, action: PayloadAction<'light' | 'dark'>) => {
       state.themeMode = action.payload;
     },
   },

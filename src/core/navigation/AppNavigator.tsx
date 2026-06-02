@@ -41,25 +41,15 @@ const ThemeToggle: React.FC = () => {
   const themeMode = useSelector(selectThemeMode);
 
   const handleToggle = () => {
-    if (themeMode === 'system') {
-      dispatch(setThemeMode('light'));
-    } else if (themeMode === 'light') {
-      dispatch(setThemeMode('dark'));
-    } else {
-      dispatch(setThemeMode('system'));
-    }
+    dispatch(setThemeMode(themeMode === 'light' ? 'dark' : 'light'));
   };
 
   const getThemeEmoji = () => {
-    if (themeMode === 'system') return '🌓';
-    if (themeMode === 'light') return '☀️';
-    return '🌙';
+    return themeMode === 'light' ? '☀️' : '🌙';
   };
 
   const getThemeLabel = () => {
-    if (themeMode === 'system') return 'Auto';
-    if (themeMode === 'light') return 'Light';
-    return 'Dark';
+    return themeMode === 'light' ? 'Light' : 'Dark';
   };
 
   return (

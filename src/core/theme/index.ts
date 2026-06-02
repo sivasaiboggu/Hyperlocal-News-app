@@ -233,13 +233,10 @@ export const darkTheme: Theme = {
 };
 
 export const useAppTheme = (): Theme => {
-  const systemScheme = useColorScheme();
   try {
-    const themeMode = useSelector((state: RootState) => state.news?.themeMode || 'system');
-    if (themeMode === 'dark') return darkTheme;
-    if (themeMode === 'light') return lightTheme;
-    return systemScheme === 'dark' ? darkTheme : lightTheme;
+    const themeMode = useSelector((state: RootState) => state.news?.themeMode || 'light');
+    return themeMode === 'dark' ? darkTheme : lightTheme;
   } catch (e) {
-    return systemScheme === 'dark' ? darkTheme : lightTheme;
+    return lightTheme;
   }
 };
